@@ -38,15 +38,27 @@ $(function() {
         return cpf;
     }
 
-    function removeAcento(text) {
-        text = text.toLowerCase();
-        text = text.replace(new RegExp('[%C3%81%C3%80%C3%82%C3%83]', 'gi'), 'a');
-        text = text.replace(new RegExp('[%C3%89%C3%88%C3%8A]', 'gi'), 'e');
-        text = text.replace(new RegExp('[%C3%8D%C3%8C%C3%8E]', 'gi'), 'i');
-        text = text.replace(new RegExp('[%C3%93%C3%92%C3%94%C3%95]', 'gi'), 'o');
-        text = text.replace(new RegExp('[%C3%9A%C3%99%C3%9B]', 'gi'), 'u');
-        text = text.replace(new RegExp('[%C3%87]', 'gi'), 'c');
-        return text;
+    function removeAcento(str) {
+        {
+            var comAcento = 'ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐ ÑÒÓÔÕÖØÙÚÛÜ ÝŔÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿŕ',
+                semAcento = 'AAAAAAACEEEEIIIIDN OOOOOOUUUUYRsBaaa aaaaceeeeiiiionoooooouuuuybyr',
+                novastr = '';
+
+            for (var i = 0; i < str.length; i++) {
+                var troca = false;
+                for (var a = 0; a < comAcento.length; a++) {
+                    if (str.substr(i, 1) === comAcento.substr(a, 1)) {
+                        novastr += semAcento.substr(a, 1);
+                        troca = true;
+                        break;
+                    }
+                }
+                if (troca === false) {
+                    novastr += str.substr(i, 1);
+                }
+            }
+            return novastr;
+        }
     }
 
     function gerarCEP() {
@@ -62,7 +74,7 @@ $(function() {
     $('#register-form-celular').val('52' + 9 + Math.random().toString(10).substring(2, 10));
     $('#register-form-empresa').val(companies[Math.floor(Math.random() * companies.length)]);
     if ($registerFormNome.length > 0) {
-        $('#register-form-email').val(removeAcento('mirele' + $registerFormNome.val().replace(' ', '.')) + '@mercadolead.com');
+        $('#register-form-email').val(removeAcento('samuel' + $registerFormNome.val().replace(' ', '.')) + '@mercadolead.com');
     }
     $('#register-form-password').val(123456);
     $('#cliente-iccomonosconheceu').val((randomiza(4) + 1).toString());
